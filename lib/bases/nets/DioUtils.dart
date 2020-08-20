@@ -8,6 +8,7 @@ import 'package:wanandroid/bases/nets/BaseEntity.dart';
 import 'package:wanandroid/bases/nets/BaseListEntity.dart';
 import 'package:wanandroid/bases/nets/DioHelper.dart';
 import 'package:wanandroid/bases/nets/HttpMethod.dart';
+import 'package:wanandroid/bases/nets/intercept.dart';
 import 'package:wanandroid/bases/utils/log_util.dart';
 import 'package:wanandroid/constants/Constant.dart';
 import 'package:wanandroid/constants/UrlConstants.dart';
@@ -73,6 +74,9 @@ class DioUtils {
       });
     }
 
+    //日志 log
+    if(Constant.IsPrintLog) _dio.interceptors.add(LoggerInterceptor());
+
     //cookie , 添加 cookie
     if(_isNeedCookie) {
       CookieJar cookieJar=CookieJar();
@@ -100,15 +104,9 @@ class DioUtils {
           queryParameters: paramMap,
           cancelToken: cancelToken,
           options: Options(method: httpMethod.value));
+
       if (response != null) {
         var json = response.data;
-
-        ///打印请求信息：
-        LogUtils.print(' DioUtils - ->'
-            '\n\n 请求 ： url = ${response.request.baseUrl + urlPath} '
-            '\n\n 请求头：${_dio.options.headers.toString()} '
-            '\n\n 请求参数： ${paramMap?.toString()} '
-            '\n\n 返回data = ${json.toString()} \n\n');
 
         BaseEntity entity = BaseEntity<T>.fromJson(json);
         if (entity.code == 0) {
@@ -119,9 +117,6 @@ class DioUtils {
         }
       }
     } on DioError catch (error) {
-      LogUtils.print(' DioUtils - ->'
-          '\n\n 请求异常 ： url = ${urlPath.toString()} '
-          '\n\n error == ${error.toString()}');
       if (callBack != null)
         callBack(error.response.statusCode, null, DioHelper.getErrorMsg(error));
     }
@@ -141,13 +136,6 @@ class DioUtils {
       if (response != null) {
         var json = response.data;
 
-        ///打印请求信息：
-        LogUtils.print(' DioUtils - ->'
-            '\n\n 请求 ： url = ${response.request.baseUrl + urlPath} '
-            '\n\n 请求头：${_dio.options.headers.toString()} '
-            '\n\n 请求参数： ${paramMap?.toString()} '
-            '\n\n 返回data = ${json.toString()} \n\n');
-
         BaseListEntity entity = BaseListEntity<T>.fromJson(json);
         if (entity.code == 0) {
           if (callBack != null) callBack(200, entity.data, "");
@@ -162,10 +150,6 @@ class DioUtils {
             '\n\n response == null');
       }
     } on DioError catch (error) {
-      LogUtils.print(' DioUtils - ->'
-          '\n\n 请求异常 ： url = ${error.request.baseUrl + urlPath.toString()} '
-          '\n\n error == ${error.toString()}');
-
       if (callBack != null) {
         int code = -1;
         if (error != null && error.response != null)
