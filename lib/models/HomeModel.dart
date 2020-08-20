@@ -14,7 +14,7 @@ class HomeModel implements IModel {
   CancelToken _cancelToken = CancelToken();
 
   void getBannerData(NetListCallBack netListCallBack) {
-    DioUtils.getInstance().requestList<List<BannerBean>>(
+    DioUtils.getInstance().requestList<BannerBean>(
         HttpMethod.GET,
         UrlConstants.BannerUrl,
         cancelToken: _cancelToken,

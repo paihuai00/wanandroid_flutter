@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
   void _init(BuildContext context) {
 //    ScreenUtil.init(context);
 
-    LogUtils.print("main - > 执行了  initDio ");
+
 
   }
 }

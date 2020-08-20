@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wanandroid/bases/nets/HttpMethod.dart';
 import 'package:wanandroid/beans/BannerBean.dart';
-import 'file:///D:/Android/flutter_projects/wanandroid_flutter/lib/bases/nets/DioUtils.dart';
 import 'package:wanandroid/constants/Constant.dart';
 import 'package:wanandroid/constants/UrlConstants.dart';
 import 'package:wanandroid/bases/mvp/BaseMvpViewPage.dart';

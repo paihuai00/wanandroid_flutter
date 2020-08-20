@@ -55,14 +55,15 @@ class DioUtils {
 
   //内部构造方法
   DioUtils._internal() {
-    LogUtils.print('tag - _baseUrl = ${_baseUrl}');
-    BaseOptions _baseOptions = DioHelper.buildBaseOptions(
+    BaseOptions _baseOptions = BaseOptions(
         connectTimeout: _connectTimeout,
         receiveTimeout: _receiveTimeout,
         sendTimeout: _sendTimeout,
         responseType: ResponseType.json,
         baseUrl: _baseUrl);
     //json 数据解析
+    LogUtils.print('DioUtils - _baseUrl = $_baseUrl');
+
     _dio = Dio(_baseOptions);
 
     //添加拦截器
@@ -73,19 +74,18 @@ class DioUtils {
     }
 
     //cookie , 添加 cookie
-//    if(_isNeedCookie) {
-//      CookieJar cookieJar=CookieJar();
-//      _dio.interceptors.add(CookieManager(cookieJar));
-//    }
+    if(_isNeedCookie) {
+      CookieJar cookieJar=CookieJar();
+      _dio.interceptors.add(CookieManager(cookieJar));
+    }
+
   }
 
   /// 工厂构造方法，这里使用命名构造函数方式进行声明
   factory DioUtils.getInstance() => _getInstance();
 
   static DioUtils _getInstance() {
-    LogUtils.print('Tag - ${_dioUtils == null}');
     if (_dioUtils == null) _dioUtils = DioUtils._internal();
-
     return _dioUtils;
   }
 
@@ -119,13 +119,15 @@ class DioUtils {
         }
       }
     } on DioError catch (error) {
+      LogUtils.print(' DioUtils - ->'
+          '\n\n 请求异常 ： url = ${urlPath.toString()} '
+          '\n\n error == ${error.toString()}');
       if (callBack != null)
         callBack(error.response.statusCode, null, DioHelper.getErrorMsg(error));
     }
   }
 
-
-   //同一个cancel token 可以用于多个请求，当一个cancel token取消时，所有使用该cancel token的请求都会被取消。
+  //同一个cancel token 可以用于多个请求，当一个cancel token取消时，所有使用该cancel token的请求都会被取消。
   Future requestList<T>(HttpMethod httpMethod, String urlPath,
       {Map<String, dynamic> paramMap,
       NetListCallBack<T> callBack,
@@ -134,7 +136,7 @@ class DioUtils {
       Response response = await _dio.request(urlPath,
           queryParameters: paramMap,
           cancelToken: cancelToken,
-          options: Options(method: httpMethod.value));
+          options: Options(method: httpMethod.value, responseType: ResponseType.json));
 
       if (response != null) {
         var json = response.data;
@@ -160,6 +162,10 @@ class DioUtils {
             '\n\n response == null');
       }
     } on DioError catch (error) {
+      LogUtils.print(' DioUtils - ->'
+          '\n\n 请求异常 ： url = ${error.request.baseUrl + urlPath.toString()} '
+          '\n\n error == ${error.toString()}');
+
       if (callBack != null) {
         int code = -1;
         if (error != null && error.response != null)
