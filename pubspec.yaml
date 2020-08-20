@@ -27,6 +27,7 @@ dependencies:
   # 网络 dio
   dio: 3.0.10
   cookie_jar: ^1.0.1
+  #https://github.com/flutterchina/dio/tree/master/plugins/cookie_manager
   dio_cookie_manager: ^1.0.0
   # sp 存储
   shared_preferences: ^0.5.3
@@ -46,6 +47,10 @@ dependencies:
   toast: 0.1.5
   #屏幕适配：https://github.com/OpenFlutter/flutter_screenutil/blob/master/README_CN.md
   flutter_screenutil: ^2.3.0
+
+#flutter 目录地址
+  path_provider: ^1.6.11
+
 #---------------------------------------------------------------------------------------------------------------------------------------
 
 

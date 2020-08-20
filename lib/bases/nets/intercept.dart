@@ -36,3 +36,29 @@ class LoggerInterceptor extends Interceptor {
         '\n\n 返回data = ${response.toString()} \n\n');
   }
 }
+
+
+///请求拦截器
+class RequestInterceptor extends Interceptor{
+
+  @override
+  Future onRequest(RequestOptions options) async{
+    String path=options.path;
+    if(path.startsWith('http')) {
+      //path 为地址全路径
+      options.baseUrl='';
+    }
+
+    return super.onRequest(options);
+  }
+
+  @override
+  Future onError(DioError err) async{
+    return super.onError(err);
+  }
+
+  @override
+  Future onResponse(Response response) async{
+    return super.onResponse(response);
+  }
+}
