@@ -57,6 +57,8 @@ dependencies:
   #https://juejin.im/post/6844903949619691528
   flutter_custom_dialog: ^1.0.4
 
+  #轮播图： https://github.com/best-flutter/flutter_swiper
+  flutter_swiper: ^1.1.6
 
 #---------------------------------------------------------------------------------------------------------------------------------------
 
