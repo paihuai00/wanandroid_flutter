@@ -3,6 +3,9 @@ import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'package:wanandroid/bases/mvp/IPresenter.dart';
 import 'package:wanandroid/bases/mvp/IView.dart';
 import 'package:wanandroid/bases/utils/DialogUtils.dart';
+import 'package:wanandroid/bases/utils/log_util.dart';
+import 'package:wanandroid/bases/utils/screen_utils.dart';
+import 'package:wanandroid/constants/Constant.dart';
 
 ///Author: cuishuxiang
 ///Date: 2020/8/19 16:03
@@ -22,6 +25,7 @@ abstract class BaseViewState<V extends BaseMvpViewPage, P extends IPresenter>
   bool _isShowEmpty; // 显示空页面
   bool _isShowError; // 显示错误页面
   bool _isShowLoading; // 显示错误页面
+  EmptyErrorClick _emptyErrorClick;
 
   @override
   void initState() {
@@ -44,7 +48,9 @@ abstract class BaseViewState<V extends BaseMvpViewPage, P extends IPresenter>
 
   Widget _buildBody() {
     return Container(
-      color: Colors.white,///页面背景色
+      color: Colors.white,
+
+      ///页面背景色
       child: Stack(
         children: [
           /// Offstage  控制child是否显示
@@ -80,30 +86,65 @@ abstract class BaseViewState<V extends BaseMvpViewPage, P extends IPresenter>
 
   Widget buildWidget(BuildContext context);
 
-  Widget _buildErrorWidget({EmptyErrorClick click}) {
+  ///错误页面
+  Widget _buildErrorWidget() {
     return GestureDetector(
       child: Container(
-        child: Text('错误页面'),
+        width: ScreenUtils.getScreenWidth(),
+        height: ScreenUtils.getScreenHeight(),
+        child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,///垂直居中
+              children: [
+                Image.asset(
+                  Constant.Image_Assets + 'ic_error.png',
+                  width: 100,
+                  height: 100,
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: Text('未知错误,点击重试!'),
+                )
+              ],
+            )),
       ),
       onTap: () {
         ///点击事件
-        click();
+        _emptyErrorClick?.call();
       },
     );
   }
 
-  Widget _buildEmptyWidget({EmptyErrorClick click}) {
+  ///空数据页面
+  Widget _buildEmptyWidget() {
     return GestureDetector(
       child: Container(
-        child: Text('空页面'),
+        width: ScreenUtils.getScreenWidth(),
+        height: ScreenUtils.getScreenHeight(),
+        child: Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,///垂直居中
+          children: [
+            Image.asset(
+              Constant.Image_Assets + 'ic_empty.png',
+              width: 100,
+              height: 100,
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Text('暂无数据'),
+            )
+          ],
+        )),
       ),
       onTap: () {
         ///点击事件
-        click();
+        _emptyErrorClick?.call();
       },
     );
   }
 
+  ///加载中页面
   Widget _buildLoadingWidget({EmptyErrorClick click}) {
     return GestureDetector(
       child: Container(
@@ -134,24 +175,26 @@ abstract class BaseViewState<V extends BaseMvpViewPage, P extends IPresenter>
     setState(() {});
   }
 
-  void showError() {
+  void showError({EmptyErrorClick click}) {
     _isShowLoading = false;
     _isContentWidgetShow = false;
     _isShowError = true;
     _isShowEmpty = false;
+    _emptyErrorClick = click;
     setState(() {});
   }
 
-  void showEmpty() {
+  void showEmpty({EmptyErrorClick click}) {
     _isShowLoading = false;
     _isContentWidgetShow = false;
     _isShowError = false;
     _isShowEmpty = true;
+    _emptyErrorClick = click;
     setState(() {});
   }
 
   ///显示弹框，初始化[YYDialog.init(ctx)]
-  void showProgress({EmptyErrorClick click}) {
+  void showProgress() {
     if (_yyDialog == null) _yyDialog = DialogUtil.getLoadingDialog();
 
     if (!_yyDialog.isShowing) _yyDialog.show();
@@ -170,6 +213,11 @@ abstract class BaseViewState<V extends BaseMvpViewPage, P extends IPresenter>
     if (_presenter != null) {
       _presenter.detach();
       _presenter = null;
+    }
+
+    if (_yyDialog != null) {
+      _yyDialog.dismiss();
+      _yyDialog = null;
     }
   }
 }
