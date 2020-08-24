@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'package:wanandroid/bases/nets/HttpMethod.dart';
 import 'package:wanandroid/bases/utils/DialogUtils.dart';
+import 'package:wanandroid/bases/utils/ToastUtils.dart';
 import 'package:wanandroid/beans/BannerBean.dart';
 import 'package:wanandroid/constants/Constant.dart';
 import 'package:wanandroid/constants/UrlConstants.dart';
@@ -23,30 +24,13 @@ class HomePage extends BaseMvpViewPage {
 class _HomeState extends BaseViewState<HomePage, HomPresenter>
     implements HomeView {
   @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      body: Row(
-        children: <Widget>[
-          RaisedButton(
-            child: Text('点我'),
-            onPressed: () {
-
-              showProgress();
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  @override
   createPresenter() {
     return HomPresenter(context);
   }
 
   @override
   initView() {
+    showLoading();
     presenter.getBannerData();
   }
 
@@ -54,10 +38,29 @@ class _HomeState extends BaseViewState<HomePage, HomPresenter>
   void onBannerDataCallBack(
       bool isSuccess, List<BannerBean> bannerList, String msg) {
     //数据回调
+
+    if (isSuccess) {
+      showContent();
+      ToastUtils.show(context, '数据加载成功');
+    }
   }
 
   @override
   BuildContext getContext() {
     return context;
+  }
+
+  @override
+  Widget buildWidget(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        RaisedButton(
+          child: Text('点我'),
+          onPressed: () {
+            showProgress();
+          },
+        )
+      ],
+    );
   }
 }

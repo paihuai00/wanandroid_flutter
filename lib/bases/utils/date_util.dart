@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 ///Author: cuishuxiang
 ///Date: 2020/8/20 14:45
-///Description: 
+///Description:   参考： https://github.com/Cheney2006/flutter_utils/blob/master/lib/date_util.dart
 
 ///日期格式化
 enum DateFormat {
