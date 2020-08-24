@@ -12,6 +12,11 @@ abstract class IPresenter<V extends IView, M extends IModel>
     implements IBasePresenter {
   V _view;
   M _model;
+  BuildContext _context;
+
+  IPresenter(this._context);
+
+
 
   @override
   void attach(IView view) {

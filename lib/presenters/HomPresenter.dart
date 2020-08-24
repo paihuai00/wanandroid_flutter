@@ -11,6 +11,9 @@ import 'package:wanandroid/models/HomeModel.dart';
 ///Description:
 
 class HomPresenter extends IPresenter<HomeView, HomeModel> {
+
+  HomPresenter(BuildContext context) : super(context);
+
   @override
   IModel createModel() {
     return HomeModel();

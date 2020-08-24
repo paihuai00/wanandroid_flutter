@@ -48,9 +48,14 @@ dependencies:
   #屏幕适配：https://github.com/OpenFlutter/flutter_screenutil/blob/master/README_CN.md
   flutter_screenutil: ^2.3.0
 
-#flutter 目录地址
+  #flutter 目录地址
   path_provider: ^1.6.11
 
+  # 动态权限
+  permission_handler: ^5.0.1+1
+
+  #https://juejin.im/post/6844903949619691528
+  flutter_custom_dialog: ^1.0.4
 #---------------------------------------------------------------------------------------------------------------------------------------
 
 

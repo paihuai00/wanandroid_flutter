@@ -6,4 +6,5 @@ import 'package:flutter/material.dart';
 
 abstract class IView {
 
+  BuildContext getContext();
 }
